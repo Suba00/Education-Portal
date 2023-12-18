@@ -1,0 +1,22 @@
+﻿@model NewWebApp.Models.AddVideoMetadata
+@{
+}
+<h1>Add Test</h1>
+<form method="post" action="Add" class="mt-5">
+    <div class="mb-3">
+        <label for="" class="form-label">VideoTitle</label>
+        <input type="text" class="form-control" asp-for="VideoTitle">
+    </div>
+
+    <div class="mb-3">
+        <label for="" class="form-label">Description</label>
+        <input type="text" class="form-control" asp-for="Description">
+    </div>
+
+    <div class="mb-3">
+        <label for="" class="form-label">VideoUrl</label>
+        <input type="text" class="form-control" asp-for="VideoUrl">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

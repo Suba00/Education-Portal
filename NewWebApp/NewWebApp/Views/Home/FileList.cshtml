@@ -1,0 +1,34 @@
+﻿@model List<NewWebApp.Models.Domain.FileMetadata>
+
+@{
+    ViewData["Title"] = "File List";
+}
+
+<h2>File List</h2>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>File Name</th>
+                <th>Download</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var fileMetadata in Model)
+            {
+                <tr>
+                    <td>@fileMetadata.FileName</td>
+                    <td>
+                        <a asp-action="Download" asp-route-fileName="@fileMetadata.FileName">Download</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No files available.</p>
+}

@@ -1,0 +1,36 @@
+﻿@model List<NewWebApp.Models.Domain.VideoMetadata>
+
+@{
+    ViewData["Title"] = "Video List";
+}
+
+<h2>Video List</h2>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Video Title</th>
+                <th>Description</th>
+                <th>Video URL</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var videoMetadata in Model)
+            {
+                <tr>
+                    <td>@videoMetadata.VideoTitle</td>
+                    <td>@videoMetadata.Description</td>
+                    <td>
+                        <a href="@videoMetadata.VideoUrl" target="_blank">Watch Video</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No videos available.</p>
+}

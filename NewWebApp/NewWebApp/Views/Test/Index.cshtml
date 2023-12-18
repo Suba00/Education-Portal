@@ -1,0 +1,25 @@
+﻿@model List<NewWebApp.Models.Domain.Test1>
+
+@{
+}
+
+<h1>Test1</h1>
+<table class="table">
+	<thead>
+		<tr>
+			<th>Id</th>
+			<th>fullName</th>
+			<th> </th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var test in Model)
+		{
+			<tr>
+				<td>@test.Id</td>
+				<td>@test.FullName</td>
+				@*<td><a href="NewEmployees/View/@employee.Id">View</a></td>*@
+			</tr>
+		}
+	</tbody>
+</table>

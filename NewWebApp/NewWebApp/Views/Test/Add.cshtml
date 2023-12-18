@@ -1,0 +1,12 @@
+﻿@model NewWebApp.Models.AddTest
+@{
+}
+<h1>Создание практических задании ползователя</h1>
+<form method="post" action="Add" class="mt-5">
+    <div class="mb-3">
+        <label for="" class="form-label">Условие задания</label>
+        @*<input type="text" class="form-control" asp-for="FullName">*@
+        <textarea class="form-control" asp-for="FullName"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Добавить</button>
+</form>

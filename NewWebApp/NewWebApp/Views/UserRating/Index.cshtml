@@ -1,0 +1,59 @@
+﻿@model List<NewWebApp.Models.Domain.UserRating>
+
+@{
+    var orderedModel = Model.OrderByDescending(u => u.Score).ToList();
+}
+
+<h1>UserRating</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+          @*  <th>Order</th>*@
+            <th>
+                <a href="?sort=fullName">FullName</a>
+            </th>
+            <th>
+                <a href="?sort=score">Score</a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < orderedModel.Count; i++)
+        {
+            var userRating = orderedModel[i];
+            <tr>
+               @* <td>@userRating.Id</td>*@
+                <td>@(i + 1)</td> <!-- Порядковый номер -->
+                <td>@userRating.FullName</td>
+                <td>@userRating.Score</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+
+
+@*<h1>UserRating</h1>
+<table class="table">
+	<thead>
+		<tr>
+			<th>Id</th>
+			<th>fullName</th>
+			<th> </th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var userRating in Model)
+		{
+			<tr>
+				<td>@userRating.Id</td>
+				<td>@userRating.FullName</td>
+				<td>@userRating.Score</td>
+				@*<td><a href="NewEmployees/View/@employee.Id">View</a></td>
+			</tr>
+		}
+	</tbody>
+</table>*@

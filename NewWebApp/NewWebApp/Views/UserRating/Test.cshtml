@@ -1,0 +1,208 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        #quiz-container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 600px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        .question {
+            display: none;
+        }
+
+            .question.active {
+                display: block;
+                animation: fadeIn 0.5s ease-in-out;
+            }
+
+        .options label {
+            display: block;
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+            .options label.correct {
+                background-color: silver;
+            }
+
+            .options label.wrong {
+                background-color: silver;
+            }
+
+            .options label.selected {
+                background-color: #0077a3;
+            }
+
+            .options label:hover {
+                background-color: #45a049;
+            }
+
+        button {
+            background-color: #008CBA;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+            button:hover {
+                background-color: #0077a3;
+            }
+
+        #result {
+            font-weight: bold;
+            margin-top: 20px;
+            color: #333;
+        }
+
+        #wrapperQuestion {
+            display: none;
+        }
+
+        .answer-feedback {
+            margin-top: 10px;
+        }
+
+        label {
+            background-color: #ffff;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="quiz-container">
+        <div id="startPoint">
+            <h1>Тест по теме...</h1>
+            <label for="name">Введите ваше имя:</label>
+            <input type="text" id="name" placeholder="Ваше имя">
+            <button onClick="startPoint()">Начать тест</button>
+        </div>
+        <div id="wrapperQuestion">
+            <div class="question active" id="question1">
+                <p>Вопрос 1: Что такое HTML?</p>
+                <div class="options">
+                    <label class="correct"><input type="radio" name="q1" value="a"> Гипертекстовый язык разметки</label>
+                    <label class="wrong"><input type="radio" name="q1" value="b"> Каскадные таблицы стилей</label>
+                    <label class="wrong"><input type="radio" name="q1" value="c"> Язык программирования</label>
+                </div>
+                <button onclick="nextQuestion('question1', 'question2')">Следующий вопрос</button>
+            </div>
+
+            <div class="question" id="question2">
+                <p>Вопрос 2: Что такое CSS?</p>
+                <div class="options">
+                    <label class="wrong"><input type="radio" name="q2" value="a"> Язык программирования</label>
+                    <label class="wrong"><input type="radio" name="q2" value="b"> Гипертекстовый язык разметки</label>
+                    <label class="correct"><input type="radio" name="q2" value="c"> Каскадные таблицы стилей</label>
+                </div>
+                <button onclick="nextQuestion('question2', 'question3')">Следующий вопрос</button>
+            </div>
+
+            <div class="question" id="question3">
+                <p>Вопрос 3: Что такое JavaScript?</p>
+                <div class="options">
+                    <label class="correct"><input type="radio" name="q3" value="a"> Язык программирования</label>
+                    <label class="wrong"><input type="radio" name="q3" value="b"> Гипертекстовый язык разметки</label>
+                    <label class="wrong"><input type="radio" name="q3" value="c"> Каскадные таблицы стилей</label>
+                </div>
+                <button onclick="showResults()">Получить результат</button>
+            </div>
+        </div>
+
+        <div id="result" class="answer-feedback"></div>
+    </div>
+
+    <script>
+        // Добавь это в начало твоего скрипта, перед функцией startPoint()
+        let usersResults = [];
+
+
+        function startPoint() {
+            const startPointDiv = document.getElementById("startPoint");
+            const wrapperQuestion = document.getElementById("wrapperQuestion");
+            const name = document.getElementById('name').value;
+            if (name.trim() === '') {
+                alert('Введите ваше имя, пожалуйста.');
+                return;
+            }
+            startPointDiv.style.display = 'none';
+            wrapperQuestion.style.display = "block";
+        }
+
+        function nextQuestion(currentQuestionId, nextQuestionId) {
+            const currentQuestion = document.getElementById(currentQuestionId);
+            const nextQuestion = document.getElementById(nextQuestionId);
+
+            currentQuestion.classList.remove('active');
+            nextQuestion.classList.add('active');
+        }
+
+        function showResults() {
+            const name = document.getElementById('name').value;
+            const score = calculateIndividualScore('q1') + calculateIndividualScore('q2') + calculateIndividualScore('q3');
+            const resultContainer = document.getElementById('result');
+            resultContainer.innerHTML = `<p>${name}, ваш счет: ${score} из 3 баллов.</p>`;
+
+            resultContainer.innerHTML += `<button onclick="openRatingPage()">Таблица рейтингов</button>`;
+        }
+
+        function calculateIndividualScore(questionId) {
+            const selectedOption = document.querySelector(`input[name="${questionId}"]:checked`);
+            if (selectedOption) {
+                selectedOption.parentElement.classList.add('selected');
+                return selectedOption.parentElement.classList.contains('correct') ? 1 : 0;
+            }
+            return 0;
+        }
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,106 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тестовое задание</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #question-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #answer-input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        #result-message {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        #next-btn {
+            padding: 10px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="question-container">
+        <p id="question-text">Задание 1: Что выведет в консоль следующий код?</p>
+        <pre>
+function b(x, y, a) {
+    arguments[2] = 10;
+    alert(a);
+}
+b(1, 2, 3);
+    </pre>
+        <input type="text" id="answer-input" placeholder="Введите ответ">
+
+        <button onclick="checkAnswer()">Проверить</button>
+        <button onclick="nextQuestion()" id="next-btn" style="display: none;">Следующее задание</button>
+
+        <p id="result-message"></p>
+    </div>
+
+    <script>
+        const correctAnswers = ["10", "3", "false false true"];
+        let currentQuestion = 0;
+
+        function checkAnswer() {
+            const userAnswer = document.getElementById("answer-input").value.trim();
+            const resultMessage = document.getElementById("result-message");
+            const nextBtn = document.getElementById("next-btn");
+
+            if (userAnswer.toLowerCase() === correctAnswers[currentQuestion].toLowerCase()) {
+                resultMessage.style.color = "green";
+                resultMessage.textContent = "Правильно!";
+                nextBtn.style.display = "inline-block";
+            } else {
+                resultMessage.style.color = "red";
+                resultMessage.textContent = "Неправильно. Попробуйте еще раз.";
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < correctAnswers.length) {
+                document.getElementById("question-text").textContent = `Задание ${currentQuestion + 1}: ${getQuestionText()}`;
+                document.getElementById("answer-input").value = "";
+                document.getElementById("result-message").textContent = "";
+                document.getElementById("next-btn").style.display = "none";
+            } else {
+                alert("Вы завершили тестовое задание!");
+            }
+        }
+
+        function getQuestionText() {
+            const questions = [
+                "Что выведет в консоль следующий код?",
+                "Что выведет в консоль этот код?",
+                "Что выведет в консоль следующий код?"
+            ];
+            return questions[currentQuestion];
+        }
+
+        document.getElementById("question-text").textContent = `Задание ${currentQuestion + 1}: ${getQuestionText()}`;
+    </script>
+
+</body>
+</html>
