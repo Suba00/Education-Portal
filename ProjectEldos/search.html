@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.5s, color 0.5s;
+        }
+
+        p {
+            color: #333;
+            text-align: center;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 20px;
+        }
+
+        .video-container {
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+
+        iframe {
+            width: 900px;
+            height: 520px;
+            border-radius: 8px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            margin-top: 10px;
+            width: 300px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        label, button {
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 10px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        label:hover, button:hover {
+            filter: brightness(0.8);
+        }
+
+        label.dark-mode, button.dark-mode {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+        }
+
+        label.light-mode, button.light-mode {
+            background-color: #ecf0f1;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <center>
+        <label class="dark-mode" onclick="toggleDarkMode()">Курс программирования</label>
+    </center>
+
+    <center>
+        <input type="text" id="search" placeholder="Поиск для видео" oninput="filterVideos()">
+    </center>
+
+    <center>
+        <div id="videoContainer">
+            <!-- Video elements will be added dynamically here -->
+        </div>
+    </center>
+
+    <script>
+        var videos = [
+            { id: 'fHl7UyRjOf0', title: 'Video 1', name: "javascript" },
+            { id: 'hiH4QQjhBak', title: 'Video 2', name: "java" },
+            { id: 'm4Cqz2_P9rI', title: 'Video 3', name: "kotlin" },
+        ];
+
+        function filterVideos() {
+            var searchTerm = document.getElementById('search').value.toLowerCase();
+            var videoContainer = document.getElementById('videoContainer');
+
+            // Clear existing videos
+            videoContainer.innerHTML = '';
+
+            // Display videos that match the search term in either title or name
+            videos.forEach(function (video) {
+                if (video.title.toLowerCase().includes(searchTerm) || video.name.toLowerCase().includes(searchTerm)) {
+                    var videoDiv = createVideoElement(video.id);
+                    videoContainer.appendChild(videoDiv);
+                }
+            });
+        }
+
+        function createVideoElement(videoId) {
+            var videoDiv = document.createElement('div');
+            videoDiv.className = 'video-container';
+
+            var iframe = document.createElement('iframe');
+            iframe.src = 'https://www.youtube.com/embed/' + videoId;
+            iframe.frameborder = '0';
+            iframe.allowfullscreen = true;
+
+            videoDiv.appendChild(iframe);
+
+            return videoDiv;
+        }
+
+        function toggleDarkMode() {
+            var body = document.body;
+            body.classList.toggle('dark-mode');
+
+            // Toggle label and button styles
+            var labels = document.querySelectorAll('label');
+            labels.forEach(function (label) {
+                label.classList.toggle('dark-mode');
+                label.classList.toggle('light-mode');
+            });
+
+            var buttons = document.querySelectorAll('button');
+            buttons.forEach(function (button) {
+                button.classList.toggle('dark-mode');
+                button.classList.toggle('light-mode');
+            });
+        }
+
+        // Initial display of videos
+        filterVideos();
+    </script>
+</body>
+</html>

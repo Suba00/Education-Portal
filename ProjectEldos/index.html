@@ -1,0 +1,322 @@
+<html>
+
+<head>
+    <title>Образовательный тест</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        #quiz {
+            background-color: #fff;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #0077b6;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+
+        label {
+            cursor: pointer;
+            color: #333;
+        }
+
+        button {
+            background-color: #0077b6;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #005b8e;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            animation: fadeIn 1s;
+        }
+
+        /* Анимация для рейтинга */
+        .rating-container {
+            margin-top: 20px;
+        }
+
+        .rating {
+            display: inline-block;
+            font-size: 24px;
+            color: #0077b6;
+        }
+
+        .rating span {
+            display: inline-block;
+            margin: 0 5px;
+            transform: scale(0);
+            animation: scaleIn 0.5s ease-in-out forwards;
+        }
+
+        /* Сообщение об ошибке */
+        #error {
+            color: #ff0000;
+        }
+
+        keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+
+            to {
+                transform: scale(1);
+            }
+        }
+
+        /* Дополнительные стили для стилизации вопросов и ответов */
+        #question {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        #quiz {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        #wrapperTime {
+            width: 100px;
+            height: 30px;
+            border: 2px solid rgb(4, 138, 4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            display: none;
+        }
+
+    </style>
+</head>
+
+<body>
+    <h1>Образовательный тест</h1>
+    <div id="quiz">
+        <div id="wrapperTime">
+            <p id="level"></p>
+        </div>
+        <p id="question">Вопрос 1: Сколько планет в солнечной системе?</p>
+        <ul>
+            <li>
+                <input type="radio" name="answer" value="a" id="answerA">
+                <label for="answerA">a) 7</label>
+            </li>
+            <li>
+                <input type="radio" name="answer" value="b" id="answerB">
+                <label for="answerB">b) 8</label>
+            </li>
+            <li>
+                <input type="radio" name="answer" value="c" id="answerC">
+                <label for="answerC">c) 9</label>
+            </li>
+        </ul>
+        <button id="submit">Ответить</button>
+        <!-- Сообщение об ошибке -->
+        <div id="error"></div>
+    </div>
+
+    <div id="userData">
+        <label for="userName">Ваше имя:</label>
+        <input type="text" id="userName" placeholder="Введите ваше имя">
+        <button id="saveUserData">Сохранить данные</button>
+    </div>
+
+    <div id="result">
+        <div id="userResult"></div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Сколько планет в солнечной системе?",
+                answers: {
+                    a: "7",
+                    b: "8",
+                    c: "9"
+                },
+                correctAnswer: "b"
+            },
+            {
+                question: "Какая теория описывает эффект Эйнштейновского-Подольского-Розена в квантовой механике?",
+                answers: {
+                    a: "Теория относительности",
+                    b: "Квантовая теория поля",
+                    c: "Теория струн"
+                },
+                correctAnswer: "c"
+            },
+
+            {
+                question: "Если sin(α) = 0.6 и tan(α) = 0.75, то какое значение cos(α)?",
+                answers: {
+                    a: "0.8",
+                    b: "0.6",
+                    c: "0.4"
+                },
+                correctAnswer: "c"
+            },
+
+            {
+                question: "Решите систему уравнений: \n2x + 3y = 12\n4x - y = 5",
+                answers: {
+                    a: "x = 3, y = 2",
+                    b: "x = 2, y = 3",
+                    c: "x = 1, y = 4"
+                },
+                correctAnswer: "a"
+            }
+        ];
+
+        const quizContainer = document.getElementById('quiz');
+        const resultContainer = document.getElementById('result');
+        const submitButton = document.getElementById('submit');
+        const errorContainer = document.getElementById('error');
+
+
+        let currentQuestion = 0;
+        let score = 0;
+        let showResultFlag = false;
+
+        function displayQuestion() {
+            const currentQuestionData = questions[currentQuestion];
+            document.getElementById('question').textContent = `Вопрос ${currentQuestion + 1}: ${currentQuestionData.question}`;
+            document.getElementById('answerA').nextElementSibling.textContent = `a) ${currentQuestionData.answers.a}`;
+            document.getElementById('answerB').nextElementSibling.textContent = `b) ${currentQuestionData.answers.b}`;
+            document.getElementById('answerC').nextElementSibling.textContent = `c) ${currentQuestionData.answers.c}`;
+        }
+
+        function checkAnswer() {
+            const currentQuestionData = questions[currentQuestion];
+            const selectedAnswer = document.querySelector('input[name="answer"]:checked');
+
+            if (!selectedAnswer) {
+                errorContainer.textContent = 'Пожалуйста, выберите ответ.';
+                return;
+            } else {
+                errorContainer.textContent = ''; // Очистка сообщения об ошибке
+            }
+
+            // Uncheck the selected radio button
+            selectedAnswer.checked = false;
+
+            if (selectedAnswer.value === currentQuestionData.correctAnswer) {
+                score++;
+            }
+
+            currentQuestion++;
+
+            if (currentQuestion < questions.length) {
+                displayQuestion();
+            } else {
+                if (showResultFlag) {
+                    showResult();
+                }
+            }
+        }
+
+        function showResult() {
+            quizContainer.style.display = 'none';
+            const userName = document.getElementById('userName').value;
+            resultContainer.textContent = `${userName}, вы правильно ответили на ${score} из ${questions.length} вопросов.`;
+
+            // Расчет рейтинга и анимация
+            const ratingContainer = document.createElement('div');
+            ratingContainer.classList.add('rating-container');
+
+            for (let i = 0; i < questions.length; i++) {
+                const star = document.createElement('span');
+                star.textContent = '★';
+                if (i < score) {
+                    star.style.color = 'gold';
+                }
+                ratingContainer.appendChild(star);
+            }
+
+            resultContainer.appendChild(ratingContainer);
+        }
+
+        displayQuestion();
+        submitButton.addEventListener('click', checkAnswer);
+
+        const userDataContainer = document.getElementById('userData');
+        const userNameInput = document.getElementById('userName');
+        const saveUserDataButton = document.getElementById('saveUserData');
+        const userResultContainer = document.getElementById('userResult');
+
+        saveUserDataButton.addEventListener('click', function () {
+            const userName = userNameInput.value;
+            const time = document.getElementById('wrapperTime');
+            time.style.display = "flex"
+            showTime();
+            if (userName) {
+                userDataContainer.style.display = 'none';
+                showResultFlag = true; // Устанавливаем флаг в true после сохранения данных
+            }
+        });
+
+        const showTime = () => {
+            let duration = 5 * 60 + 59; // Продолжительность в секундах
+            const countdownElement = document.getElementById("level");
+
+            const countdownInterval = setInterval(function () {
+                const minutes = Math.floor(duration / 60);
+                const seconds = duration % 60;
+
+                // Отображайте результат в элементе с id "countdown"
+                countdownElement.innerHTML = `${minutes}м ${seconds}с`;
+
+                // Если время вышло, выведите сообщение и остановите обновление
+                if (duration <= 0) {
+                    clearInterval(countdownInterval);
+                    countdownElement.innerHTML = "Время вышло!";
+                }
+
+                duration--; // Уменьшаем продолжительность на 1 секунду
+            }, 1000); // Интервал в миллисекундах (1000 миллисекунд = 1 секунда)
+        }
+
+    </script>
+</body>
+
+</html>
